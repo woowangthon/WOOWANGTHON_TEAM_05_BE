@@ -1,0 +1,22 @@
+{
+  "version": "2026-11-12-demo-v1",
+  "city": "Sydney",
+  "currency": "AUD",
+  "housing": [
+    { "id": "newtown-share", "name": "햇살이 드는 뉴타운 쉐어룸", "area": "Newtown", "type": "share", "weekly_rent": 290, "bond": 1160, "advance_rent": 580, "commutes": { "Sydney CBD": 28, "Surry Hills": 24, "Parramatta": 58 }, "monthly_transport": 180, "tags": ["개인 침실", "주방 공유", "동네 카페"], "color": "peach" },
+    { "id": "ashfield-share", "name": "역 가까운 애쉬필드 쉐어룸", "area": "Ashfield", "type": "share", "weekly_rent": 250, "bond": 1000, "advance_rent": 500, "commutes": { "Sydney CBD": 36, "Surry Hills": 42, "Parramatta": 32 }, "monthly_transport": 200, "tags": ["개인 침실", "역세권", "생활 편의"], "color": "sage" },
+    { "id": "redfern-share", "name": "도심과 가까운 레드펀 쉐어룸", "area": "Redfern", "type": "share", "weekly_rent": 340, "bond": null, "advance_rent": 680, "commutes": { "Sydney CBD": 18, "Surry Hills": 15, "Parramatta": 48 }, "monthly_transport": 150, "tags": ["개인 침실", "짧은 통근", "보증금 확인 필요"], "color": "lavender" },
+    { "id": "parramatta-studio", "name": "나만의 공간, 파라마타 스튜디오", "area": "Parramatta", "type": "studio", "weekly_rent": 440, "bond": 1760, "advance_rent": 880, "commutes": { "Sydney CBD": 48, "Surry Hills": 55, "Parramatta": 12 }, "monthly_transport": 210, "tags": ["단독 거주", "개인 주방", "기차 통근"], "color": "sage" },
+    { "id": "surry-studio", "name": "걸어서 출근하는 서리힐스 스튜디오", "area": "Surry Hills", "type": "studio", "weekly_rent": 580, "bond": 2320, "advance_rent": 1160, "commutes": { "Sydney CBD": 20, "Surry Hills": 10, "Parramatta": 56 }, "monthly_transport": 100, "tags": ["단독 거주", "개인 욕실", "도심 생활"], "color": "peach" }
+  ],
+  "living_costs": { "food": 600, "utilities": 140, "phone": 50, "moving": 300 },
+  "guides": [
+    { "id": "visa", "title": "워킹홀리데이 공식 요건 확인", "category": "비자", "stage": "출국 전", "text": "국적·연령·이전 체류 이력에 맞는 요건과 신청 절차를 공식 페이지에서 확인하세요. 이 서비스는 비자 자격을 확정하지 않습니다.", "url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-417/first-working-holiday-417", "publisher": "Australian Department of Home Affairs", "checked_at": "2026-11-12", "purposes": ["working_holiday"] },
+    { "id": "work-visa", "title": "근로 가능한 비자와 조건 확인", "category": "비자", "stage": "출국 전", "text": "취업·인턴 계획에 맞는 비자와 근로 조건을 호주 내무부 공식 안내에서 확인하세요. 회사명만으로 취업 자격을 판단할 수 없습니다.", "url": "https://immi.homeaffairs.gov.au/", "publisher": "Australian Department of Home Affairs", "checked_at": "2026-11-12", "purposes": ["employment", "internship"] },
+    { "id": "insurance", "title": "의료·보험 범위와 견적 확인", "category": "의료·보험", "stage": "출국 전", "text": "자신의 비자 조건과 보험 보장 범위를 확인하고 견적을 입력하세요. 보험료가 없으면 월 예상 지출은 부분 합계로 표시됩니다.", "url": "https://immi.homeaffairs.gov.au/", "publisher": "Australian Department of Home Affairs", "checked_at": "2026-11-12", "purposes": [] },
+    { "id": "tax", "title": "TFN 발급 절차 확인", "category": "세금·행정", "stage": "입국 직후", "text": "호주에서 일하기 전 TFN 신청 방법과 자신의 세금 관련 의무를 확인하세요. 신청 방식은 개인 상황에 따라 다릅니다.", "url": "https://my.gov.au/en/services/living-arrangements/coming-to-australia/coming-to-australia-to-work/tax-and-superannuation-as-a-visa-holder", "publisher": "myGov", "checked_at": "2026-11-12", "purposes": [] },
+    { "id": "transport", "title": "실제 출근 시간에 경로 확인", "category": "교통·생활", "stage": "입국 직후", "text": "Transport for NSW Trip Planner에서 출발지·목적지·시간을 지정해 실제 경로와 요금을 확인하세요. 이 데모의 통근시간·교통비는 가상 수치입니다.", "url": "https://transportnsw.info/trip-planner/plan", "publisher": "Transport for NSW", "checked_at": "2026-11-12", "purposes": [] },
+    { "id": "work", "title": "근로계약과 급여 조건 확인", "category": "근로", "stage": "취업·입주 전", "text": "비자 소지자와 이주 노동자를 위한 근로권 안내를 읽고 계약·급여·근무시간을 확인하세요. 구체적인 직종별 조건은 공식 안내에서 확인해야 합니다.", "url": "https://www.fairwork.gov.au/find-help-for/visa-holders-migrants", "publisher": "Fair Work Ombudsman", "checked_at": "2026-11-12", "purposes": [] },
+    { "id": "rent", "title": "계약서·보증금·입주 상태 확인", "category": "주거", "stage": "취업·입주 전", "text": "NSW 공식 안내에서 임대차 유형에 맞는 계약과 보증금 절차를 확인하세요. 입주 전 상태 기록과 납부 증빙을 준비하세요.", "url": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live", "publisher": "NSW Government", "checked_at": "2026-11-12", "purposes": [] }
+  ]
+}
