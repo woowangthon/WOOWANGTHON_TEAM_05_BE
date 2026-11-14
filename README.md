@@ -8,7 +8,7 @@ Python 3.12 이상과 [uv](https://docs.astral.sh/uv/)가 필요합니다.
 
 ```sh
 uv sync --locked --group dev
-uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
+uv run python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
 - API 문서: http://127.0.0.1:8000/docs
@@ -33,16 +33,26 @@ AI_SERVICE_URL이 없으면 명확히 표시한 규칙 기반 데모가 실행�
 
 모델은 비용을 계산하거나 URL을 만들지 않습니다. 변경 필드를 허용 목록과 Pydantic으로 검증한 뒤 전체 Profile을 다시 검증합니다. 설명은 모델이 선택한 초점과 등록된 출처 ID를 검증하고 서버가 표현합니다. 작은 공식 문서 corpus의 메타데이터 검색이며 벡터 DB는 사용하지 않습니다.
 
-## Docker로 BE·AI·Ollama 실행
+AI Studio 무료 API를 사용하려면 AI 저장소의 `.env`에 `AI_PROVIDER=google`, `GEMINI_API_KEY`, `GEMMA_MODEL=gemma-4-26b-a4b-it`를 설정합니다. Google 키는 AI 서버에만 보관하며 `AI_API_KEY`와는 별개입니다. 설정과 무료 한도는 [AI README](../WOOWANGTHON_TEAM_05_AI/README.md)를 참고하세요.
+
+## Docker로 BE·AI 실행
 
 이 저장소와 AI 저장소를 같은 부모 폴더에 받습니다. Docker 실행 환경에서:
 
 ```sh
 docker compose up --build -d
+```
+
+기본 연결은 Google AI Studio이며 AI 폴더의 `.env`를 읽습니다. Docker Compose 2.24.0 이상이 필요합니다. 서버 간 `AI_API_KEY`는 BE 폴더의 `.env`에서 전달합니다.
+
+로컬 Ollama를 사용하려면 AI `.env`를 `AI_PROVIDER=ollama`, `GEMMA_MODEL=gemma3:4b`로 설정하고 다음 명령을 사용하세요.
+
+```sh
+docker compose --profile local up --build -d
 docker compose exec ollama ollama pull gemma3:4b
 ```
 
-모델 다운로드는 별도이며 GPU가 없으면 CPU 추론이 느릴 수 있습니다. GPU 설정은 실행 환경에 맞게 추가하세요. 모델 크기는 AI의 GEMMA_MODEL로 변경할 수 있습니다. Docker 구성은 로컬 시연용이며 실제 실행 검증은 별도입니다.
+로컬 모델 다운로드는 별도이며 GPU가 없으면 CPU 추론이 느릴 수 있습니다. GPU 설정은 실행 환경에 맞게 추가하세요. Docker 구성은 로컬 시연용이며 실제 실행 검증은 별도입니다.
 
 ## 비용·데이터
 
@@ -60,7 +70,7 @@ FE와 fixture를 함께 갱신해야 합니다. FE의 `tests/integration.mjs`로
 ## 검증·배포
 
 ```sh
-uv run pytest -q
+uv run python -m pytest -q
 ```
 
 공개 서비스에서는 BACKEND_API_KEY와 AI_API_KEY를 설정하고 TLS·허용 출처를 실제 배포에 맞게 지정하세요. FE에 같은 BACKEND_API_KEY를 서버 환경 변수로 설정합니다. API는 현재 상태를 저장하지 않으며 계정·DB·예약 기능이 없습니다.

@@ -11,12 +11,14 @@ services:
   ai:
     build: ../WOOWANGTHON_TEAM_05_AI
     ports: ["127.0.0.1:8001:8001"]
+    env_file:
+      - path: ../WOOWANGTHON_TEAM_05_AI/.env
+        required: false
     environment:
       OLLAMA_BASE_URL: http://ollama:11434
-      GEMMA_MODEL: ${GEMMA_MODEL:-gemma3:4b}
       AI_API_KEY: ${AI_API_KEY:-}
-    depends_on: [ollama]
   ollama:
+    profiles: ["local"]
     image: ollama/ollama:latest
     ports: ["127.0.0.1:11434:11434"]
     volumes: ["ollama:/root/.ollama"]
