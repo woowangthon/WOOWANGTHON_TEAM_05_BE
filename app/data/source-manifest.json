@@ -1,0 +1,44 @@
+[
+  {
+    "url": "https://transportnsw.info/tickets-fares/fares",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "a4336a8987b3330e5607a61a3f16a82ac2f5d3bd1a033a1fcfc5817362a20797",
+    "status": 200
+  },
+  {
+    "url": "https://www.sydney.edu.au/study/fees-and-loans/other-costs/living-costs.html",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "9ebb4767ff6a81f6069e97ba112d126475b35936c362a1839025ad5a81ff289d",
+    "status": 200
+  },
+  {
+    "url": "https://cdacoliving.com/share-house/sydney/newtown",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "95faf535bfcd5a3668610cf64443a8d26e565816d65208aaa06377f5ba69fe2e",
+    "status": 200
+  },
+  {
+    "url": "https://cdacoliving.com/flatmates/sydney/ashfield",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "f6c5250f6394165af9804649fd012304c15891b0bc66da86d6eaba1c8fe445be",
+    "status": 200
+  },
+  {
+    "url": "https://cdacoliving.com/flatmates/sydney/redfern",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "8a712d25356a9faf7c000be8563682338b31aaac4744c6c39705e120b608d8ed",
+    "status": 200
+  },
+  {
+    "url": "https://www.uko.com.au/uko-newtown/floorplans/studio",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "9003f030fd1045ab6084c6e07e47c543d1588b6a18d93e18e11d8284ce6f1410",
+    "status": 200
+  },
+  {
+    "url": "https://www.uko.com.au/uko-surry-hills/floorplans/studio",
+    "retrieved_at": "2026-11-13T18:24:34.541245+09:00",
+    "sha256": "bf4eb4939a191645fc7d7689e270e2d77340278da8f6d3c436e91a1d66818425",
+    "status": 200
+  }
+]

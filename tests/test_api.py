@@ -19,10 +19,10 @@ def clean_env(monkeypatch):
 
 def test_budget_and_unknown_costs():
     result = build_plan(Profile(**PROFILE))
-    ash = next(h for h in result["options"] if h["id"] == "ashfield-share")
-    assert (ash["rent"], ash["monthly"], ash["initial"]) == (1083.33, 2073.33, 1800)
+    ash = next(h for h in result["options"] if h["id"] == "cda-ashfield")
+    assert (ash["rent"], ash["monthly"], ash["initial"]) == (996.67, 2243.34, 0)
     assert ash["monthly_missing"] == ["의료·보험료"]
-    red = next(h for h in result["options"] if h["id"] == "redfern-share")
+    red = next(h for h in result["options"] if h["id"] == "cda-redfern")
     assert red["bond"] is None and "보증금" in red["initial_missing"]
 
 
@@ -31,7 +31,7 @@ def test_create_revise_empty_and_validation():
         assert client.post("/api/plans", json=PROFILE).status_code == 200
         result = client.post("/api/plans/revise", json={"profile": PROFILE, "message": "더 저렴하게, 통근 60분"}).json()
         assert result["changes"] == {"sort_by": "cheapest", "max_commute": 60}
-        assert result["options"][0]["id"] == "ashfield-share"
+        assert result["options"][0]["id"] == "cda-redfern"
         assert client.post("/api/plans", json={**PROFILE, "monthly_budget": 10}).json()["options"] == []
         for patch in [{"monthly_budget": -1}, {"workplace": "Paris"}, {"arrival_date": "2027-02-30"}, {"monthly_budget": "3000"}]:
             assert client.post("/api/plans", json={**PROFILE, **patch}).status_code == 422
@@ -62,7 +62,7 @@ def test_ai_outage_is_visible(monkeypatch):
     monkeypatch.setattr("app.main.call_ai", fake_call)
     with TestClient(app) as client:
         result = client.post("/api/plans", json=PROFILE).json()
-        assert result["mode"] == "demo" and "Gemma" in result["warnings"][-1]
+        assert result["mode"] == "rules" and "Gemma" in result["warnings"][-1]
         assert client.post("/api/plans/revise", json={"profile": PROFILE, "message": "바꿔"}).status_code == 503
 
 

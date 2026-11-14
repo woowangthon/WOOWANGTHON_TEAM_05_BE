@@ -51,7 +51,7 @@ async def enrich(plan: dict) -> dict:
         plan["mode"] = "gemma"
         plan["explanation_source_ids"] = ids
         label = {"budget": "비용", "commute": "통근", "checklist": "준비 절차"}[focus]
-        plan["explanation"] = "Gemma가 " + label + " 중심으로 계획을 정리했습니다. 비용·시간은 서버가 계산한 시연용 추정치이며, 아래 공식 안내에서 조건을 확인하세요."
+        plan["explanation"] = "Gemma가 " + label + " 중심으로 계획을 정리했습니다. 공개 시작 요금과 참고 예산을 사용하며, 원문에서 실제 계약 조건과 통근 경로를 확인하세요."
     except HTTPException:
         plan["warnings"].append("Gemma 설명 생성에 실패하여 규칙 기반 결과를 표시합니다. 모델이 응답한 결과가 아닙니다.")
     return plan
@@ -59,7 +59,7 @@ async def enrich(plan: dict) -> dict:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "ai_configured": bool(os.getenv("AI_SERVICE_URL")), "data": "demo"}
+    return {"status": "ok", "ai_configured": bool(os.getenv("AI_SERVICE_URL")), "data": "sourced_snapshot"}
 
 
 @app.post("/api/plans", dependencies=[Depends(authenticate)])

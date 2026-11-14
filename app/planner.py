@@ -29,11 +29,13 @@ def calculate_budget(housing: dict, profile: Profile) -> dict:
     living = DATA["living_costs"]
     rent = money(housing["weekly_rent"] * 52 / 12)
     # Nullable costs have separate missing lists. The subtotal is never represented as a complete total.
-    monthly = money(rent + housing["monthly_transport"] + living["food"] + living["utilities"] + living["phone"] + (profile.insurance if profile.insurance is not None else 0))
-    initial = money((housing["bond"] if housing["bond"] is not None else 0) + housing["advance_rent"] + living["moving"])
+    utilities = 0 if housing.get("bills_included") else living["utilities"]
+    monthly = money(rent + housing["monthly_transport"] + living["food"] + (utilities or 0) + living["phone"] + (profile.insurance if profile.insurance is not None else 0))
+    initial = money((housing["bond"] or 0) + (housing["advance_rent"] or 0) + (living["moving"] or 0))
     return {"rent": rent, "monthly": monthly, "initial": initial,
-            "monthly_missing": ["의료·보험료"] if profile.insurance is None else [],
-            "initial_missing": (["보증금"] if housing["bond"] is None else []) + ["항공권", "비자 관련 비용", "기타 개인 정착 비용"],
+            "utilities": utilities,
+            "monthly_missing": (["의료·보험료"] if profile.insurance is None else []) + (["공과금"] if utilities is None else []),
+            "initial_missing": (["보증금"] if housing["bond"] is None else []) + (["선납 월세"] if housing["advance_rent"] is None else []) + (["이사비"] if living["moving"] is None else []) + ["항공권", "비자 관련 비용", "기타 개인 정착 비용"],
             "monthly_remaining": money(profile.monthly_budget - monthly), "initial_remaining": money(profile.initial_budget - initial)}
 
 
@@ -48,19 +50,22 @@ def build_checklist(profile: Profile, guides: list[dict]) -> list[dict]:
 def build_plan(profile: Profile) -> dict:
     options = []
     for housing in find_housing_options(profile):
-        option = {**housing, **get_commute_estimates(housing, profile), **calculate_budget(housing, profile),
-                  "is_demo": True, "source_url": None, "checked_at": DATA["version"][:10]}
-        if option["commute"] <= profile.max_commute and option["monthly"] <= profile.monthly_budget and option["initial"] <= profile.initial_budget:
+        option = {**housing, **get_commute_estimates(housing, profile), **calculate_budget(housing, profile)}
+        option["commute_verified"] = option["commute"] is not None
+        if (option["commute"] is None or option["commute"] <= profile.max_commute) and option["monthly"] <= profile.monthly_budget and option["initial"] <= profile.initial_budget:
             options.append(option)
     def score(h):
-        value = h["monthly"] if profile.sort_by == "cheapest" else h["commute"] if profile.sort_by == "fastest" else h["monthly"] + h["commute"] * 10
+        commute = h["commute"] if h["commute"] is not None else 10000
+        value = h["monthly"] if profile.sort_by == "cheapest" else commute if profile.sort_by == "fastest" else h["monthly"] + commute * 10
         return value, h["id"]
     options.sort(key=score)
     return {"profile": profile.model_dump(mode="json"), "options": options[:3],
             "guides": build_checklist(profile, search_settlement_guides(profile)), "living_costs": DATA["living_costs"],
-            "currency": "AUD", "data_version": DATA["version"], "mode": "demo",
-            "explanation": "입력한 조건으로 가상 후보를 계산했습니다. 알려진 비용 기준이며 미확인 비용은 별도로 확인하세요." if options else "현재 조건에 맞는 후보가 없습니다. 예산·통근시간·주거 형태를 조정해 보세요.",
-            "warnings": ["주거·월세·통근시간·생활비는 시연용 가상 데이터이며 실제 매물·시세가 아닙니다.",
+            "currency": "AUD", "data_version": DATA["version"], "mode": "rules", "cost_sources": DATA.get("cost_sources", []),
+            "explanation": "공개 요금과 참고 예산으로 비교했습니다. 시작 요금은 확정 견적이 아니며 통근 미확인 후보는 조건 충족 여부를 확인해야 합니다." if options else "현재 조건에 맞는 후보가 없습니다. 예산·통근시간·주거 형태를 조정해 보세요.",
+            "warnings": ["운영사 공개 요금 스냅샷입니다. 지역 시작 요금은 특정 공실이 아니며 계약 가격·입주 가능일은 원문에서 재확인하세요.",
+                         "통근시간은 운영사 지역→CBD 참고치입니다. 미확인 경로도 후보로 표시하며 최대 통근 조건을 충족한다고 보장하지 않습니다.",
+                         "식비·통신비는 대학 안내 범위의 하한, 교통비는 Opal 주간 상한의 월 환산 예산입니다. 개인 지출과 다를 수 있습니다.",
                          "주간 월세는 주간 금액 × 52 ÷ 12로 월 환산합니다. 초기 비용은 보증금·선납 월세·이사비의 부분 합계이며 월 지출과 더하지 않습니다.",
                          "의료·보험료, 항공권, 비자 및 기타 비용의 누락 여부를 확인하세요. 비자 자격은 판정하지 않습니다."]}
 
