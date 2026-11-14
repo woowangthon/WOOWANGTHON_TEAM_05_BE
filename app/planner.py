@@ -29,7 +29,8 @@ def calculate_budget(housing: dict, profile: Profile) -> dict:
     living = DATA["living_costs"]
     rent = money(housing["weekly_rent"] * 52 / 12)
     # Nullable costs have separate missing lists. The subtotal is never represented as a complete total.
-    utilities = 0 if housing.get("bills_included") else living["utilities"]
+    included = housing.get("bills_included")
+    utilities = 0 if included is True else living["utilities"] if included is False else None
     monthly = money(rent + housing["monthly_transport"] + living["food"] + (utilities or 0) + living["phone"] + (profile.insurance if profile.insurance is not None else 0))
     initial = money((housing["bond"] or 0) + (housing["advance_rent"] or 0) + (living["moving"] or 0))
     return {"rent": rent, "monthly": monthly, "initial": initial,

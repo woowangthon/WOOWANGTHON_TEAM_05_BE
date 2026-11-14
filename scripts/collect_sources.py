@@ -12,6 +12,10 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import httpx
+try:
+    from scripts.enrich_sources import enrich
+except ModuleNotFoundError:
+    from enrich_sources import enrich
 
 ROOT = Path(__file__).resolve().parents[1]
 LIVING_URL = "https://www.sydney.edu.au/study/fees-and-loans/other-costs/living-costs.html"
@@ -125,6 +129,8 @@ def collect(sync_frontend=False):
     for guide in data["guides"]:
         if guide["id"] == "transport":
             guide["text"] = "출발지·직장·출근시간을 지정해 실제 경로를 확인하세요. 지역→CBD 시간은 운영사 참고치이며, 나머지 경로는 미확인입니다. 교통 예산은 성인 Opal 주간 상한을 월 환산합니다."
+    # Preserve separately dated manual evidence; never claim it was crawled today.
+    data = enrich(data)
     encoded = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
     data_path.write_text(encoded, encoding="utf-8")
     (ROOT / "app/data/source-manifest.json").write_text(json.dumps(records, indent=2) + "\n", encoding="utf-8")
